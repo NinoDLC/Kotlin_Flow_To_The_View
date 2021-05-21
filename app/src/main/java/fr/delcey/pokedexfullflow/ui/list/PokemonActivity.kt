@@ -1,7 +1,6 @@
 package fr.delcey.pokedexfullflow.ui.list
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
@@ -28,9 +27,7 @@ class PokemonActivity : AppCompatActivity() {
         binding.pokemonsRv.adapter = adapter
 
         addRepeatingJob(Lifecycle.State.STARTED) {
-            Log.d("Nino", "onCreate().addRepeatingJob called")
             pokemonViewModel.uiStateFlow.collect {
-                Log.d("Nino", "PokemonActivity : onCreate().collect called, view has to display ${it.size} items")
                 adapter.submitList(it)
             }
         }

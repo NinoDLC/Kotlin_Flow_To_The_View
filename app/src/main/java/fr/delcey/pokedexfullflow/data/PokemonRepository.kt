@@ -1,8 +1,8 @@
 package fr.delcey.pokedexfullflow.data
 
-import android.util.Log
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -37,28 +37,20 @@ class PokemonRepository @Inject constructor() {
         pokeApi = retrofit.create(PokeApi::class.java)
     }
 
-    val pokemonsFlow = flow {
-        Log.d("Nino", "PokemonRepository : flow started")
-
-        emit(listOf())
-
-        val pokemons = pokeApi.getAllPokemon()
-
-        Log.d("Nino", "PokemonRepository : all pokemons queried")
+    val pokemonsFlow : Flow<List<PokemonResponse>> = flow {
+        val pokemonListReponse = pokeApi.getAllPokemon()
 
         val arrayList = ArrayList<PokemonResponse>()
 
-        for (i in 0..3) {
-
-            Log.d("Nino", "PokemonRepository : delaying...")
+        // TODO Paging to do ! (now we only have the 20 first pokemons queried)
+        for (i in pokemonListReponse?.pokemonLiteReponses?.indices ?: IntRange.EMPTY) {
 
             delay(2_000)
 
-            val pokemonLiteReponse = pokemons?.pokemonLiteReponses?.get(i)
+            val pokemonLiteReponse = pokemonListReponse?.pokemonLiteReponses?.get(i)
 
             if (pokemonLiteReponse?.name != null) {
                 pokeApi.getPokemonById(pokemonLiteReponse.name)?.let {
-                    Log.d("Nino", "PokemonRepository : new pokemon queried : ${it.name}")
                     arrayList.add(it)
                 }
 
@@ -66,6 +58,4 @@ class PokemonRepository @Inject constructor() {
             }
         }
     }
-
-
 }

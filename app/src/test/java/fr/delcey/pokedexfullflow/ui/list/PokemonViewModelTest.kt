@@ -1,6 +1,6 @@
 package fr.delcey.pokedexfullflow.ui.list
 
-import fr.delcey.pokedexfullflow.CoroutineContextProvider
+import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonSprites
@@ -9,7 +9,7 @@ import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
@@ -30,14 +30,15 @@ class PokemonViewModelTest {
 
     private val pokemonRepository = mockk<PokemonRepository>()
 
-    private val coroutineContextProvider = mockk<CoroutineContextProvider>()
+    private val coroutineContextProvider = mockk<CoroutineToolsProvider>()
 
     @Before
     fun setUp() {
         every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
 
-        every { coroutineContextProvider.main } returns testCoroutineRule.testCoroutineDispatcher
-        every { coroutineContextProvider.io } returns testCoroutineRule.testCoroutineDispatcher
+        every { coroutineContextProvider.mainCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
+        every { coroutineContextProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
+        every { coroutineContextProvider.sharingStartedStateInStrategy } returns SharingStarted.Eagerly
     }
 
     @Test

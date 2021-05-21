@@ -3,19 +3,19 @@ package fr.delcey.pokedexfullflow.ui.list
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import fr.delcey.pokedexfullflow.CoroutineContextProvider
+import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.plus
 import javax.inject.Inject
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 @HiltViewModel
 class PokemonViewModel @Inject constructor(
     pokemonRepository: PokemonRepository,
-    coroutineContextProvider: CoroutineContextProvider
+    coroutineToolsProvider: CoroutineToolsProvider
 ) : ViewModel() {
 
     val uiStateFlow = pokemonRepository.pokemonsFlow.mapLatest { pokemonResponses ->
@@ -23,8 +23,8 @@ class PokemonViewModel @Inject constructor(
             map(pokemonResponse)
         }
     }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
+        scope = viewModelScope.plus(coroutineToolsProvider.ioCoroutineDispatcher),
+        started = coroutineToolsProvider.sharingStartedStateInStrategy,
         initialValue = emptyList()
     )
 
