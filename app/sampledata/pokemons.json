@@ -1,0 +1,35 @@
+{
+  "comment": "Sample data for Pokemons",
+  "data": [
+    {
+      "name": "Bulbizarre",
+      "image": "@sample/pokemons",
+      "number": "001",
+      "type2_visibility": "visible"
+    },
+    {
+      "name": "Salamèche",
+      "image": "@sample/pokemons",
+      "number": "004",
+      "type2_visibility": "gone"
+    },
+    {
+      "name": "Carapuce",
+      "image": "@sample/pokemons",
+      "number": "007",
+      "type2_visibility": "gone"
+    },
+    {
+      "name": "Pikachu",
+      "image": "@sample/pokemons",
+      "number": "025",
+      "type2_visibility": "gone"
+    },
+    {
+      "name": "Mimitoss",
+      "image": "@sample/pokemons",
+      "number": "048",
+      "type2_visibility": "gone"
+    },
+  ]
+}

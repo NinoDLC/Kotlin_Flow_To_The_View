@@ -1,0 +1,41 @@
+{
+  "comment": "Sample data for pokemon type filter",
+  "data": [
+    {
+      "checked": false,
+      "color": "#9bcc50",
+      "text": "Plante",
+      "textColor": "#000"
+    },
+    {
+      "checked": true,
+      "color": "#b97fc9",
+      "text": "Poison",
+      "textColor": "#FFF"
+    },
+    {
+      "checked": true,
+      "color": "#fd7d24",
+      "text": "Feu",
+      "textColor": "#FFF"
+    },
+    {
+      "checked": true,
+      "color": "#4592c4",
+      "text": "Eau",
+      "textColor": "#FFF"
+    },
+    {
+      "checked": true,
+      "color": "#eed535",
+      "text": "Électrik",
+      "textColor": "#000"
+    },
+    {
+      "checked": false,
+      "color": "#729f3f",
+      "text": "Insect",
+      "textColor": "#FFF"
+    }
+  ]
+}

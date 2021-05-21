@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.chip.Chip
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/pokemon_type_item_chip"
+    style="@style/Widget.MaterialComponents.Chip.Entry"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:checkable="true"
+    android:theme="@style/Theme.MaterialComponents.Light"
+    app:closeIconVisible="false"
+    tools:checked="@sample/pokemon_type.json/data/checked"
+    tools:chipBackgroundColor="@sample/pokemon_type.json/data/color"
+    tools:chipIcon="@sample/pokemon_type.json/data/icon"
+    tools:text="@sample/pokemon_type.json/data/text"
+    tools:textColor="@sample/pokemon_type.json/data/textColor" />
