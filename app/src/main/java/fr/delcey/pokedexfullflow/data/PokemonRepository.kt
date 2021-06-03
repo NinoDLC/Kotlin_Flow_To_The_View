@@ -37,7 +37,10 @@ class PokemonRepository @Inject constructor() {
         pokeApi = retrofit.create(PokeApi::class.java)
     }
 
-    val pokemonsFlow : Flow<List<PokemonResponse>> = flow {
+    /**
+     * A Flow that completes after at least 40 seconds (20 pokemon queried)
+     */
+    val pokemonsFlow: Flow<List<PokemonResponse>> = flow {
         val pokemonListReponse = pokeApi.getAllPokemon()
 
         val arrayList = ArrayList<PokemonResponse>()
@@ -56,6 +59,27 @@ class PokemonRepository @Inject constructor() {
 
                 emit(arrayList)
             }
+        }
+    }
+
+    /**
+     * A Flow that never completes
+     */
+    val infinitePokemonFlow: Flow<List<PokemonResponse>> = flow {
+
+        val arrayList = ArrayList<PokemonResponse>()
+        var i = 1
+
+        while (true) {
+            delay(2_000)
+
+            pokeApi.getPokemonById(i.toString())?.let {
+                arrayList.add(it)
+            }
+
+            i++
+
+            emit(arrayList)
         }
     }
 }

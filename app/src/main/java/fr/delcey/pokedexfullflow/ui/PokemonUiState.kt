@@ -1,4 +1,4 @@
-package fr.delcey.pokedexfullflow.ui.list
+package fr.delcey.pokedexfullflow.ui
 
 data class PokemonUiState(
     val id: Int,

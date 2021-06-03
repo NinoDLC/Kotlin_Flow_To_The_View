@@ -1,4 +1,4 @@
-package fr.delcey.pokedexfullflow.ui.list
+package fr.delcey.pokedexfullflow.ui
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import fr.delcey.pokedexfullflow.databinding.PokemonItemviewBinding
-import fr.delcey.pokedexfullflow.ui.list.PokemonAdapter.PokemonViewHolder
+import fr.delcey.pokedexfullflow.ui.PokemonAdapter.PokemonViewHolder
 
 class PokemonAdapter(private val listener: (PokemonUiState) -> Unit) : ListAdapter<PokemonUiState, PokemonViewHolder>(PokemonDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
