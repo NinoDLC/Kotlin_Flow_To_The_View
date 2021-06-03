@@ -8,7 +8,6 @@ import javax.inject.Singleton
 
 @Singleton
 class CoroutineToolsProvider @Inject constructor() {
-    val mainCoroutineDispatcher: CoroutineDispatcher = Dispatchers.Main
     val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
     val sharingStartedStateInStrategy: SharingStarted = SharingStarted.WhileSubscribed(
         stopTimeoutMillis = 5_000,

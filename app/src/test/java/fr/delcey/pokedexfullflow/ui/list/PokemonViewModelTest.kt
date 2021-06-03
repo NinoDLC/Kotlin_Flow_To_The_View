@@ -36,7 +36,6 @@ class PokemonViewModelTest {
     fun setUp() {
         every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
 
-        every { coroutineContextProvider.mainCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
         every { coroutineContextProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
         every { coroutineContextProvider.sharingStartedStateInStrategy } returns SharingStarted.Eagerly
     }
@@ -54,12 +53,29 @@ class PokemonViewModelTest {
     }
 
     @Test
-    fun `not so nominal case`() = testCoroutineRule.runBlockingTest {
+    fun `not so nominal case - a delay between 2 values !`() = testCoroutineRule.runBlockingTest {
         // Given
         every { pokemonRepository.pokemonsFlow } returns flow {
             emit(getDefaultPokemonList(1))
             delay(3_000)
-            emit(getDefaultPokemonList(3))
+            emit(getDefaultPokemonList())
+        }
+        val viewModel = PokemonViewModel(pokemonRepository, coroutineContextProvider)
+
+        // When
+        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        val result = viewModel.uiStateFlow.first()
+
+        // Then
+        assertEquals(getExpectedPokemonUiStates(), result)
+    }
+
+    @Test
+    fun `another not so nominal case - an initial delay !`() = testCoroutineRule.runBlockingTest {
+        // Given
+        every { pokemonRepository.pokemonsFlow } returns flow {
+            delay(3_000)
+            emit(getDefaultPokemonList())
         }
         val viewModel = PokemonViewModel(pokemonRepository, coroutineContextProvider)
 
@@ -83,6 +99,7 @@ class PokemonViewModelTest {
     private fun getDefaultPokemonSprites(index: Int) = PokemonSprites(
         frontDefault = "frontDefault$index"
     )
+    // endregion
 
     // region OUT
     private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonUiState> = List(size) { index: Int ->
@@ -93,4 +110,5 @@ class PokemonViewModelTest {
             number = index.toString()
         )
     }
+    // endregion
 }
