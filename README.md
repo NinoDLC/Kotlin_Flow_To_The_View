@@ -21,3 +21,6 @@ Using `.asLiveData()` extension, `liveData()` function or `.stateIn()` extension
 Also, there is one way to go with pure Kotlin, so there's no need for LiveData dependencies. Alas, unit testing is a bit more complicated (one needs to inject both `Dispatchers` and `SharingStarted` strategy). And, to my opinion, it's more error prone. 
 
 See for yourself in the project, both "pure Kotlin" and LiveData approach are used ! 
+
+Inspired by : 
+https://medium.com/androiddevelopers/a-safer-way-to-collect-flows-from-android-uis-23080b1f8bda
