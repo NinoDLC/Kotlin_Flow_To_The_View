@@ -1,4 +1,4 @@
-package fr.delcey.pokedexfullflow.ui.old
+package fr.delcey.pokedexfullflow.ui.livedata
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 @HiltViewModel
-class OldPokemonViewModel @Inject constructor(
+class LiveDataPokemonViewModel @Inject constructor(
     pokemonRepository: PokemonRepository,
     coroutineToolsProvider: CoroutineToolsProvider
 ) : ViewModel() {

@@ -13,14 +13,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.PokedexFullFlow">
-        <activity android:name=".ui.list.PokemonActivity">
+        <activity android:name=".ui.flow.FlowPokemonActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.old.OldPokemonActivity" />
+        <activity android:name=".ui.livedata.LiveDataPokemonActivity" >
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
+
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
+        </activity>
     </application>
 
 </manifest>

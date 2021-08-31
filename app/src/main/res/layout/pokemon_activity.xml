@@ -6,12 +6,12 @@
     android:id="@+id/pokemons_cl_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.list.PokemonActivity">
+    tools:context=".ui.flow.FlowPokemonActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbarlayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/pokemons_toolbar"
@@ -22,7 +22,7 @@
             tools:menu="@menu/pokemons_menu" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/pokemons_rv_types"
+            android:id="@+id/pokemons_recyclerview_types"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
@@ -35,7 +35,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/pokemons_rv"
+        android:id="@+id/pokemons_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"

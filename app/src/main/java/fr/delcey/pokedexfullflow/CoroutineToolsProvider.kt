@@ -9,7 +9,7 @@ import javax.inject.Singleton
 @Singleton
 class CoroutineToolsProvider @Inject constructor() {
     val ioCoroutineDispatcher: CoroutineDispatcher = Dispatchers.IO
-    val sharingStartedStateInStrategy: SharingStarted = SharingStarted.WhileSubscribed(
+    val sharingStartedStrategy: SharingStarted = SharingStarted.WhileSubscribed(
         stopTimeoutMillis = 5_000,
         replayExpirationMillis = 0
     )

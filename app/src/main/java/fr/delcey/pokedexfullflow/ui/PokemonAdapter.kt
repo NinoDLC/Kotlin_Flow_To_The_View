@@ -24,7 +24,11 @@ class PokemonAdapter(private val listener: (PokemonUiState) -> Unit) : ListAdapt
 
         fun bind(pokemonUiState: PokemonUiState, listener: (PokemonUiState) -> Unit) {
 
-            Glide.with(binding.pokemonItemviewIv).load(pokemonUiState.imageUrl).fitCenter().into(binding.pokemonItemviewIv)
+            Glide.with(binding.pokemonItemviewIv)
+                .load(pokemonUiState.imageUrl)
+                .fitCenter()
+                .into(binding.pokemonItemviewIv)
+
             binding.pokemonItemviewTvName.text = pokemonUiState.name
             binding.pokemonItemviewTvNumber.text = pokemonUiState.number
 
@@ -33,12 +37,8 @@ class PokemonAdapter(private val listener: (PokemonUiState) -> Unit) : ListAdapt
     }
 
     private class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonUiState>() {
-        override fun areItemsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState): Boolean {
-            return oldItem.id == newItem.id
-        }
+        override fun areItemsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState): Boolean {
-            return oldItem == newItem
-        }
+        override fun areContentsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState) = oldItem == newItem
     }
 }

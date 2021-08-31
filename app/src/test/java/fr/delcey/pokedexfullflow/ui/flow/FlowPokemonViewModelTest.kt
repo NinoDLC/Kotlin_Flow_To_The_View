@@ -1,17 +1,17 @@
-package fr.delcey.pokedexfullflow.ui.old
+package fr.delcey.pokedexfullflow.ui.flow
 
-import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonSprites
 import fr.delcey.pokedexfullflow.ui.PokemonUiState
 import fr.delcey.pokedexfullflow.utils.TestCoroutineRule
-import fr.delcey.pokedexfullflow.utils.observeForTesting
 import io.mockk.every
 import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOf
 import org.junit.Assert.assertEquals
@@ -19,41 +19,38 @@ import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 
-
 @ExperimentalCoroutinesApi
-class OldPokemonViewModelTest {
+class FlowPokemonViewModelTest {
 
     companion object {
         private const val DEFAULT_LIST_SIZE = 3
     }
 
     @get:Rule
-    val instantTaskExecutorRule = InstantTaskExecutorRule()
-
-    @get:Rule
     val testCoroutineRule = TestCoroutineRule()
 
     private val pokemonRepository = mockk<PokemonRepository>()
 
-    private val coroutineContextProvider = mockk<CoroutineToolsProvider>()
+    private val coroutineToolsProvider = mockk<CoroutineToolsProvider>()
 
     @Before
     fun setUp() {
         every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
 
-        every { coroutineContextProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
+        every { coroutineToolsProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
+        every { coroutineToolsProvider.sharingStartedStrategy } returns SharingStarted.Eagerly
     }
 
     @Test
     fun `nominal case`() = testCoroutineRule.runBlockingTest {
         // Given
-        val viewModel = OldPokemonViewModel(pokemonRepository, coroutineContextProvider)
+        val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForever {
-            // Then
-            assertEquals(getExpectedPokemonUiStates(), it)
-        }
+        val result = viewModel.uiStateFlow.first()
+
+        // Then
+        assertEquals(getExpectedPokemonUiStates(), result)
     }
 
     @Test
@@ -64,15 +61,14 @@ class OldPokemonViewModelTest {
             delay(3_000)
             emit(getDefaultPokemonList())
         }
-        val viewModel = OldPokemonViewModel(pokemonRepository, coroutineContextProvider)
+        val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
-            testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        val result = viewModel.uiStateFlow.first()
 
-            // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
-        }
+        // Then
+        assertEquals(getExpectedPokemonUiStates(), result)
     }
 
     @Test
@@ -82,15 +78,14 @@ class OldPokemonViewModelTest {
             delay(3_000)
             emit(getDefaultPokemonList())
         }
-        val viewModel = OldPokemonViewModel(pokemonRepository, coroutineContextProvider)
+        val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
-            testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        val result = viewModel.uiStateFlow.first()
 
-            // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
-        }
+        // Then
+        assertEquals(getExpectedPokemonUiStates(), result)
     }
 
     // region IN

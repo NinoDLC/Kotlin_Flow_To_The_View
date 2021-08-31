@@ -1,4 +1,4 @@
-package fr.delcey.pokedexfullflow.ui.old
+package fr.delcey.pokedexfullflow.ui.livedata
 
 import android.os.Bundle
 import android.widget.Toast
@@ -9,23 +9,23 @@ import fr.delcey.pokedexfullflow.databinding.PokemonActivityBinding
 import fr.delcey.pokedexfullflow.ui.PokemonAdapter
 
 @AndroidEntryPoint
-class OldPokemonActivity : AppCompatActivity() {
+class LiveDataPokemonActivity : AppCompatActivity() {
 
-    private lateinit var binding: PokemonActivityBinding
-
-    private val pokemonViewModel: OldPokemonViewModel by viewModels()
+    private val viewModel by viewModels<LiveDataPokemonViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = PokemonActivityBinding.inflate(layoutInflater)
+        val binding = PokemonActivityBinding.inflate(layoutInflater)
 
         setContentView(binding.root)
 
-        val adapter = PokemonAdapter { Toast.makeText(this, "Pokemon clicked : ${it.name}", Toast.LENGTH_LONG).show() }
-        binding.pokemonsRv.adapter = adapter
+        setSupportActionBar(binding.pokemonsToolbar)
 
-        pokemonViewModel.uiStateLiveData.observe(this) {
+        val adapter = PokemonAdapter { Toast.makeText(this, "Pokemon clicked : ${it.name}", Toast.LENGTH_LONG).show() }
+        binding.pokemonsRecyclerview.adapter = adapter
+
+        viewModel.uiStateLiveData.observe(this) {
             adapter.submitList(it)
         }
     }

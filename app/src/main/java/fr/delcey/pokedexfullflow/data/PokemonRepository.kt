@@ -1,5 +1,6 @@
 package fr.delcey.pokedexfullflow.data
 
+import android.util.Log
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -41,23 +42,27 @@ class PokemonRepository @Inject constructor() {
      * A Flow that completes after at least 40 seconds (20 pokemon queried)
      */
     val pokemonsFlow: Flow<List<PokemonResponse>> = flow {
-        val pokemonListReponse = pokeApi.getAllPokemon()
+        val pokemonLiteListResponse = pokeApi.getAllPokemon()
 
-        val arrayList = ArrayList<PokemonResponse>()
+        val pokemonResponses = ArrayList<PokemonResponse>()
 
         // TODO Paging to do ! (now we only have the 20 first pokemons queried)
-        for (i in pokemonListReponse?.pokemonLiteReponses?.indices ?: IntRange.EMPTY) {
+        for (i in pokemonLiteListResponse?.pokemonLiteReponses?.indices ?: IntRange.EMPTY) {
 
             delay(2_000)
 
-            val pokemonLiteReponse = pokemonListReponse?.pokemonLiteReponses?.get(i)
+            val pokemonLiteResponse = pokemonLiteListResponse?.pokemonLiteReponses?.get(i)
 
-            if (pokemonLiteReponse?.name != null) {
-                pokeApi.getPokemonById(pokemonLiteReponse.name)?.let {
-                    arrayList.add(it)
+            if (pokemonLiteResponse?.name != null) {
+                val pokemonFullResponse = pokeApi.getPokemonById(pokemonLiteResponse.name)
+
+                if (pokemonFullResponse != null) {
+                    pokemonResponses.add(pokemonFullResponse)
+
+                    Log.d("Nino", "emitting ${pokemonResponses.size} pokemons")
+
+                    emit(pokemonResponses)
                 }
-
-                emit(arrayList)
             }
         }
     }
@@ -67,19 +72,19 @@ class PokemonRepository @Inject constructor() {
      */
     val infinitePokemonFlow: Flow<List<PokemonResponse>> = flow {
 
-        val arrayList = ArrayList<PokemonResponse>()
+        val pokemonReponses = ArrayList<PokemonResponse>()
         var i = 1
 
         while (true) {
             delay(2_000)
 
             pokeApi.getPokemonById(i.toString())?.let {
-                arrayList.add(it)
+                pokemonReponses.add(it)
             }
 
             i++
 
-            emit(arrayList)
+            emit(pokemonReponses)
         }
     }
 }

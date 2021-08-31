@@ -1,4 +1,4 @@
-package fr.delcey.pokedexfullflow.ui.list
+package fr.delcey.pokedexfullflow.ui.flow
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,7 +14,7 @@ import javax.inject.Inject
 
 @Suppress("EXPERIMENTAL_API_USAGE")
 @HiltViewModel
-class PokemonViewModel @Inject constructor(
+class FlowPokemonViewModel @Inject constructor(
     pokemonRepository: PokemonRepository,
     coroutineToolsProvider: CoroutineToolsProvider
 ) : ViewModel() {
@@ -25,7 +25,7 @@ class PokemonViewModel @Inject constructor(
         }
     }.stateIn(
         scope = viewModelScope.plus(coroutineToolsProvider.ioCoroutineDispatcher),
-        started = coroutineToolsProvider.sharingStartedStateInStrategy,
+        started = coroutineToolsProvider.sharingStartedStrategy,
         initialValue = emptyList()
     )
 
