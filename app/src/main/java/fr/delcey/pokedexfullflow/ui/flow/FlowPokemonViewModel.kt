@@ -7,6 +7,7 @@ import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.ui.PokemonUiState
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.plus
@@ -19,7 +20,7 @@ class FlowPokemonViewModel @Inject constructor(
     coroutineToolsProvider: CoroutineToolsProvider
 ) : ViewModel() {
 
-    val uiStateFlow = pokemonRepository.pokemonsFlow.mapLatest { pokemonResponses ->
+    val uiStateFlow: Flow<List<PokemonUiState>> = pokemonRepository.pokemonsFlow.mapLatest { pokemonResponses ->
         pokemonResponses.mapNotNull { pokemonResponse ->
             map(pokemonResponse)
         }

@@ -64,11 +64,13 @@ class FlowPokemonViewModelTest {
         val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
-        val result = viewModel.uiStateFlow.first()
+        val result1 = viewModel.uiStateFlow.first()
+        advanceTimeBy(3_000)
+        val result2 = viewModel.uiStateFlow.first()
 
         // Then
-        assertEquals(getExpectedPokemonUiStates(), result)
+        assertEquals(getExpectedPokemonUiStates(1), result1)
+        assertEquals(getExpectedPokemonUiStates(), result2)
     }
 
     @Test
@@ -81,7 +83,7 @@ class FlowPokemonViewModelTest {
         val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(3_000)
         val result = viewModel.uiStateFlow.first()
 
         // Then
