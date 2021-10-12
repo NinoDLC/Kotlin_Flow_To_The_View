@@ -9,7 +9,7 @@ import com.bumptech.glide.Glide
 import fr.delcey.pokedexfullflow.databinding.PokemonItemviewBinding
 import fr.delcey.pokedexfullflow.ui.PokemonAdapter.PokemonViewHolder
 
-class PokemonAdapter(private val listener: (PokemonUiState) -> Unit) : ListAdapter<PokemonUiState, PokemonViewHolder>(PokemonDiffCallback()) {
+class PokemonAdapter(private val listener: (PokemonViewState) -> Unit) : ListAdapter<PokemonViewState, PokemonViewHolder>(PokemonDiffCallback()) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
         return PokemonViewHolder(
             PokemonItemviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -22,23 +22,23 @@ class PokemonAdapter(private val listener: (PokemonUiState) -> Unit) : ListAdapt
 
     class PokemonViewHolder(private val binding: PokemonItemviewBinding) : RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(pokemonUiState: PokemonUiState, listener: (PokemonUiState) -> Unit) {
+        fun bind(pokemonViewState: PokemonViewState, listener: (PokemonViewState) -> Unit) {
 
             Glide.with(binding.pokemonItemviewIv)
-                .load(pokemonUiState.imageUrl)
+                .load(pokemonViewState.imageUrl)
                 .fitCenter()
                 .into(binding.pokemonItemviewIv)
 
-            binding.pokemonItemviewTvName.text = pokemonUiState.name
-            binding.pokemonItemviewTvNumber.text = pokemonUiState.number
+            binding.pokemonItemviewTvName.text = pokemonViewState.name
+            binding.pokemonItemviewTvNumber.text = pokemonViewState.number
 
-            itemView.setOnClickListener { listener(pokemonUiState) }
+            itemView.setOnClickListener { listener(pokemonViewState) }
         }
     }
 
-    private class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonUiState>() {
-        override fun areItemsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState) = oldItem.id == newItem.id
+    private class PokemonDiffCallback : DiffUtil.ItemCallback<PokemonViewState>() {
+        override fun areItemsTheSame(oldItem: PokemonViewState, newItem: PokemonViewState) = oldItem.id == newItem.id
 
-        override fun areContentsTheSame(oldItem: PokemonUiState, newItem: PokemonUiState) = oldItem == newItem
+        override fun areContentsTheSame(oldItem: PokemonViewState, newItem: PokemonViewState) = oldItem == newItem
     }
 }

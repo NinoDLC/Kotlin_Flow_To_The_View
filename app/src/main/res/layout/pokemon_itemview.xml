@@ -53,13 +53,15 @@
             android:checkable="false"
             android:clickable="false"
             android:theme="@style/Theme.MaterialComponents.Light"
+            android:visibility="gone"
             app:closeIconVisible="false"
             app:layout_constraintStart_toEndOf="@id/pokemon_itemview_iv"
             app:layout_constraintTop_toBottomOf="@id/pokemon_itemview_tv_name"
             tools:chipBackgroundColor="@sample/pokemon_type.json/data/color"
             tools:chipIcon="@sample/pokemon_type.json/data/icon"
             tools:text="@sample/pokemon_type.json/data/text"
-            tools:textColor="@sample/pokemon_type.json/data/textColor" />
+            tools:textColor="@sample/pokemon_type.json/data/textColor"
+            tools:visibility="visible" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/pokemon_itemview_chip_type2"
@@ -71,14 +73,15 @@
             android:checkable="false"
             android:clickable="false"
             android:theme="@style/Theme.MaterialComponents.Light"
+            android:visibility="gone"
             app:closeIconVisible="false"
             app:layout_constraintStart_toEndOf="@id/pokemon_itemview_chip_type1"
             app:layout_constraintTop_toBottomOf="@id/pokemon_itemview_tv_name"
             tools:chipBackgroundColor="@sample/pokemon_type.json/data/color"
             tools:chipIcon="@sample/pokemon_type.json/data/icon"
             tools:text="@sample/pokemon_type.json/data/text"
-            tools:visibility="@sample/pokemons.json/data/type2_visibility"
-            tools:textColor="@sample/pokemon_type.json/data/textColor" />
+            tools:textColor="@sample/pokemon_type.json/data/textColor"
+            tools:visibility="@sample/pokemons.json/data/type2_visibility" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>

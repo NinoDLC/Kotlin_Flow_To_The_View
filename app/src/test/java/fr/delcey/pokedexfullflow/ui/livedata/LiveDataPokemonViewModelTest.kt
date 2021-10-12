@@ -5,7 +5,7 @@ import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonSprites
-import fr.delcey.pokedexfullflow.ui.PokemonUiState
+import fr.delcey.pokedexfullflow.ui.PokemonViewState
 import fr.delcey.pokedexfullflow.utils.TestCoroutineRule
 import fr.delcey.pokedexfullflow.utils.observeForTesting
 import io.mockk.every
@@ -18,7 +18,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-
 
 @ExperimentalCoroutinesApi
 class LiveDataPokemonViewModelTest {
@@ -39,7 +38,7 @@ class LiveDataPokemonViewModelTest {
 
     @Before
     fun setUp() {
-        every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
+        every { pokemonRepository.getPokemonsFlow() } returns flowOf(getDefaultPokemonList())
 
         every { coroutineToolsProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
     }
@@ -50,16 +49,16 @@ class LiveDataPokemonViewModelTest {
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForever {
+        viewModel.viewStateLiveData.observeForever {
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it)
+            assertEquals(getExpectedPokemonViewStates(), it)
         }
     }
 
     @Test
     fun `not so nominal case - a delay between 2 values !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             emit(getDefaultPokemonList(1))
             delay(3_000)
             emit(getDefaultPokemonList())
@@ -67,29 +66,29 @@ class LiveDataPokemonViewModelTest {
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
-            testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        viewModel.viewStateLiveData.observeForTesting {
+            advanceTimeBy(3_000)
 
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
+            assertEquals(getExpectedPokemonViewStates(), it.value)
         }
     }
 
     @Test
     fun `another not so nominal case - an initial delay !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             delay(3_000)
             emit(getDefaultPokemonList())
         }
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
-            testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        viewModel.viewStateLiveData.observeForTesting {
+            advanceTimeBy(3_000)
 
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
+            assertEquals(getExpectedPokemonViewStates(), it.value)
         }
     }
 
@@ -108,10 +107,10 @@ class LiveDataPokemonViewModelTest {
     // endregion
 
     // region OUT
-    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonUiState> = List(size) { index: Int ->
-        PokemonUiState(
+    private fun getExpectedPokemonViewStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
+        PokemonViewState(
             id = index,
-            name = "name$index",
+            name = "Name$index",
             imageUrl = "frontDefault$index",
             number = index.toString()
         )

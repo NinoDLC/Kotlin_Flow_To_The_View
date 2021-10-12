@@ -1,13 +1,17 @@
 package fr.delcey.pokedexfullflow.ui.livedata
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
-import fr.delcey.pokedexfullflow.ui.PokemonUiState
+import fr.delcey.pokedexfullflow.ui.PokemonViewState
 import kotlinx.coroutines.flow.mapLatest
+import java.util.Locale
 import javax.inject.Inject
 
 @Suppress("EXPERIMENTAL_API_USAGE")
@@ -17,19 +21,27 @@ class LiveDataPokemonViewModel @Inject constructor(
     coroutineToolsProvider: CoroutineToolsProvider
 ) : ViewModel() {
 
-    val uiStateLiveData = pokemonRepository.pokemonsFlow.mapLatest { pokemonResponses ->
-        pokemonResponses.mapNotNull { pokemonResponse ->
-            map(pokemonResponse)
-        }
-    }.asLiveData(coroutineToolsProvider.ioCoroutineDispatcher)
+    private val triggerRefreshMutableLiveData = MutableLiveData(Unit)
 
-    private fun map(pokemonResponse: PokemonResponse): PokemonUiState? = if (pokemonResponse.id != null
+    val viewStateLiveData: LiveData<List<PokemonViewState>> = triggerRefreshMutableLiveData.switchMap {
+        pokemonRepository.getPokemonsFlow().mapLatest { pokemonResponses ->
+            pokemonResponses.mapNotNull { pokemonResponse ->
+                map(pokemonResponse)
+            }
+        }.asLiveData(coroutineToolsProvider.ioCoroutineDispatcher)
+    }
+
+    fun refresh() {
+        triggerRefreshMutableLiveData.value = Unit
+    }
+
+    private fun map(pokemonResponse: PokemonResponse): PokemonViewState? = if (pokemonResponse.id != null
         && pokemonResponse.name != null
         && pokemonResponse.sprites?.frontDefault != null
     ) {
-        PokemonUiState(
+        PokemonViewState(
             id = pokemonResponse.id,
-            name = pokemonResponse.name,
+            name = pokemonResponse.name.replaceFirstChar { it.titlecase(Locale.getDefault()) },
             imageUrl = pokemonResponse.sprites.frontDefault,
             number = pokemonResponse.id.toString()
         )
