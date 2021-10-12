@@ -19,8 +19,6 @@ class PokemonRepository @Inject constructor() {
     private val pokeApi: PokeApi
 
     init {
-        // TODO provide in a module
-
         val retrofit = Retrofit.Builder()
             .baseUrl("https://pokeapi.co/api/v2/")
             .client(
@@ -39,30 +37,22 @@ class PokemonRepository @Inject constructor() {
     }
 
     /**
-     * A Flow that completes after at least 40 seconds (20 pokemon queried)
+     * A Flow that completes after at least 18 seconds (9 pokemons queried)
      */
-    val pokemonsFlow: Flow<List<PokemonResponse>> = flow {
-        val pokemonLiteListResponse = pokeApi.getAllPokemon()
+    fun getPokemonsFlow(): Flow<List<PokemonResponse>> = flow {
 
-        val pokemonResponses = ArrayList<PokemonResponse>()
+        val pokemonResponses = mutableListOf<PokemonResponse>()
 
-        // TODO Paging to do ! (now we only have the 20 first pokemons queried)
-        for (i in pokemonLiteListResponse?.pokemonLiteReponses?.indices ?: IntRange.EMPTY) {
+        for (i in 1..9) {
 
             delay(2_000)
 
-            val pokemonLiteResponse = pokemonLiteListResponse?.pokemonLiteReponses?.get(i)
+            pokeApi.getPokemonById(i.toString())?.let { pokemonResponse ->
+                pokemonResponses.add(pokemonResponse)
 
-            if (pokemonLiteResponse?.name != null) {
-                val pokemonFullResponse = pokeApi.getPokemonById(pokemonLiteResponse.name)
+                Log.d("PokemonRepository", "getPokemonsFlow() : emitting ${pokemonResponses.size} pokemons")
 
-                if (pokemonFullResponse != null) {
-                    pokemonResponses.add(pokemonFullResponse)
-
-                    Log.d("Nino", "emitting ${pokemonResponses.size} pokemons")
-
-                    emit(pokemonResponses)
-                }
+                emit(pokemonResponses)
             }
         }
     }
@@ -70,21 +60,23 @@ class PokemonRepository @Inject constructor() {
     /**
      * A Flow that never completes
      */
-    val infinitePokemonFlow: Flow<List<PokemonResponse>> = flow {
+    fun getInfinitePokemonsFlow(): Flow<List<PokemonResponse>> = flow {
 
-        val pokemonReponses = ArrayList<PokemonResponse>()
+        val pokemonResponses = mutableListOf<PokemonResponse>()
         var i = 1
 
         while (true) {
             delay(2_000)
 
-            pokeApi.getPokemonById(i.toString())?.let {
-                pokemonReponses.add(it)
+            pokeApi.getPokemonById(i.toString())?.let { pokemonResponse ->
+                pokemonResponses.add(pokemonResponse)
+
+                Log.d("PokemonRepository", "getInfinitePokemonsFlow() : emitting ${pokemonResponses.size} pokemons")
+
+                emit(pokemonResponses)
             }
 
             i++
-
-            emit(pokemonReponses)
         }
     }
 }

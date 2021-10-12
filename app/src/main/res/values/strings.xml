@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">PokedexFullFlow</string>
 
+    <string name="refresh">Refresh</string>
     <string name="sort">Sort</string>
     <string name="filter_type" >Filter by type</string>
     <string name="content_description_search">Search</string>

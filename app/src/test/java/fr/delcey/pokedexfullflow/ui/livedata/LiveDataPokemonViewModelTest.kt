@@ -5,7 +5,7 @@ import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonSprites
-import fr.delcey.pokedexfullflow.ui.PokemonUiState
+import fr.delcey.pokedexfullflow.ui.PokemonViewState
 import fr.delcey.pokedexfullflow.utils.TestCoroutineRule
 import fr.delcey.pokedexfullflow.utils.observeForTesting
 import io.mockk.every
@@ -50,7 +50,7 @@ class LiveDataPokemonViewModelTest {
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForever {
+        viewModel.viewStateLiveData.observeForever {
             // Then
             assertEquals(getExpectedPokemonUiStates(), it)
         }
@@ -67,7 +67,7 @@ class LiveDataPokemonViewModelTest {
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
+        viewModel.viewStateLiveData.observeForTesting {
             testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
 
             // Then
@@ -85,7 +85,7 @@ class LiveDataPokemonViewModelTest {
         val viewModel = LiveDataPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        viewModel.uiStateLiveData.observeForTesting {
+        viewModel.viewStateLiveData.observeForTesting {
             testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
 
             // Then
@@ -108,8 +108,8 @@ class LiveDataPokemonViewModelTest {
     // endregion
 
     // region OUT
-    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonUiState> = List(size) { index: Int ->
-        PokemonUiState(
+    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
+        PokemonViewState(
             id = index,
             name = "name$index",
             imageUrl = "frontDefault$index",

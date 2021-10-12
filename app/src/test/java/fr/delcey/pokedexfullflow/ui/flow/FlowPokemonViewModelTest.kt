@@ -4,7 +4,7 @@ import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonSprites
-import fr.delcey.pokedexfullflow.ui.PokemonUiState
+import fr.delcey.pokedexfullflow.ui.PokemonViewState
 import fr.delcey.pokedexfullflow.utils.TestCoroutineRule
 import io.mockk.every
 import io.mockk.mockk
@@ -47,7 +47,7 @@ class FlowPokemonViewModelTest {
         val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        val result = viewModel.uiStateFlow.first()
+        val result = viewModel.viewStateFlow.first()
 
         // Then
         assertEquals(getExpectedPokemonUiStates(), result)
@@ -65,7 +65,7 @@ class FlowPokemonViewModelTest {
 
         // When
         testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
-        val result = viewModel.uiStateFlow.first()
+        val result = viewModel.viewStateFlow.first()
 
         // Then
         assertEquals(getExpectedPokemonUiStates(), result)
@@ -82,7 +82,7 @@ class FlowPokemonViewModelTest {
 
         // When
         testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
-        val result = viewModel.uiStateFlow.first()
+        val result = viewModel.viewStateFlow.first()
 
         // Then
         assertEquals(getExpectedPokemonUiStates(), result)
@@ -103,8 +103,8 @@ class FlowPokemonViewModelTest {
     // endregion
 
     // region OUT
-    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonUiState> = List(size) { index: Int ->
-        PokemonUiState(
+    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
+        PokemonViewState(
             id = index,
             name = "name$index",
             imageUrl = "frontDefault$index",
