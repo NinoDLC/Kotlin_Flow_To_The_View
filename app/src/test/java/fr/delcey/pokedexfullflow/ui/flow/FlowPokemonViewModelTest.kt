@@ -35,7 +35,7 @@ class FlowPokemonViewModelTest {
 
     @Before
     fun setUp() {
-        every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
+        every { pokemonRepository.getPokemonsFlow() } returns flowOf(getDefaultPokemonList())
 
         every { coroutineToolsProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
         every { coroutineToolsProvider.sharingStartedStrategy } returns SharingStarted.Eagerly
@@ -50,13 +50,13 @@ class FlowPokemonViewModelTest {
         val result = viewModel.viewStateFlow.first()
 
         // Then
-        assertEquals(getExpectedPokemonUiStates(), result)
+        assertEquals(getExpectedPokemonViewStates(), result)
     }
 
     @Test
     fun `not so nominal case - a delay between 2 values !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             emit(getDefaultPokemonList(1))
             delay(3_000)
             emit(getDefaultPokemonList())
@@ -68,24 +68,24 @@ class FlowPokemonViewModelTest {
         val result = viewModel.viewStateFlow.first()
 
         // Then
-        assertEquals(getExpectedPokemonUiStates(), result)
+        assertEquals(getExpectedPokemonViewStates(), result)
     }
 
     @Test
     fun `another not so nominal case - an initial delay !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             delay(3_000)
             emit(getDefaultPokemonList())
         }
         val viewModel = FlowPokemonViewModel(pokemonRepository, coroutineToolsProvider)
 
         // When
-        testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
+        advanceTimeBy(4_000)
         val result = viewModel.viewStateFlow.first()
 
         // Then
-        assertEquals(getExpectedPokemonUiStates(), result)
+        assertEquals(getExpectedPokemonViewStates(), result)
     }
 
     // region IN
@@ -103,7 +103,7 @@ class FlowPokemonViewModelTest {
     // endregion
 
     // region OUT
-    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
+    private fun getExpectedPokemonViewStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
         PokemonViewState(
             id = index,
             name = "name$index",

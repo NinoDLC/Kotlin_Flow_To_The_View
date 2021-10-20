@@ -39,7 +39,7 @@ class LiveDataPokemonViewModelTest {
 
     @Before
     fun setUp() {
-        every { pokemonRepository.pokemonsFlow } returns flowOf(getDefaultPokemonList())
+        every { pokemonRepository.getPokemonsFlow() } returns flowOf(getDefaultPokemonList())
 
         every { coroutineToolsProvider.ioCoroutineDispatcher } returns testCoroutineRule.testCoroutineDispatcher
     }
@@ -52,14 +52,14 @@ class LiveDataPokemonViewModelTest {
         // When
         viewModel.viewStateLiveData.observeForever {
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it)
+            assertEquals(getExpectedPokemonViewStates(), it)
         }
     }
 
     @Test
     fun `not so nominal case - a delay between 2 values !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             emit(getDefaultPokemonList(1))
             delay(3_000)
             emit(getDefaultPokemonList())
@@ -71,14 +71,14 @@ class LiveDataPokemonViewModelTest {
             testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
 
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
+            assertEquals(getExpectedPokemonViewStates(), it.value)
         }
     }
 
     @Test
     fun `another not so nominal case - an initial delay !`() = testCoroutineRule.runBlockingTest {
         // Given
-        every { pokemonRepository.pokemonsFlow } returns flow {
+        every { pokemonRepository.getPokemonsFlow() } returns flow {
             delay(3_000)
             emit(getDefaultPokemonList())
         }
@@ -89,7 +89,7 @@ class LiveDataPokemonViewModelTest {
             testCoroutineRule.testCoroutineDispatcher.advanceTimeBy(4_000)
 
             // Then
-            assertEquals(getExpectedPokemonUiStates(), it.value)
+            assertEquals(getExpectedPokemonViewStates(), it.value)
         }
     }
 
@@ -108,7 +108,7 @@ class LiveDataPokemonViewModelTest {
     // endregion
 
     // region OUT
-    private fun getExpectedPokemonUiStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
+    private fun getExpectedPokemonViewStates(size: Int = DEFAULT_LIST_SIZE): List<PokemonViewState> = List(size) { index: Int ->
         PokemonViewState(
             id = index,
             name = "name$index",
