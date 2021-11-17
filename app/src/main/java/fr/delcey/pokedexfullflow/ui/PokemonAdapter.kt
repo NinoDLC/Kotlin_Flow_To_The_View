@@ -9,12 +9,13 @@ import com.bumptech.glide.Glide
 import fr.delcey.pokedexfullflow.databinding.PokemonItemviewBinding
 import fr.delcey.pokedexfullflow.ui.PokemonAdapter.PokemonViewHolder
 
-class PokemonAdapter(private val listener: (PokemonViewState) -> Unit) : ListAdapter<PokemonViewState, PokemonViewHolder>(PokemonDiffCallback()) {
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokemonViewHolder {
-        return PokemonViewHolder(
-            PokemonItemviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        )
-    }
+class PokemonAdapter(
+    private val listener: (PokemonViewState) -> Unit
+) : ListAdapter<PokemonViewState, PokemonViewHolder>(PokemonDiffCallback()) {
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = PokemonViewHolder(
+        PokemonItemviewBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+    )
 
     override fun onBindViewHolder(holder: PokemonViewHolder, position: Int) {
         holder.bind(getItem(position), listener)
