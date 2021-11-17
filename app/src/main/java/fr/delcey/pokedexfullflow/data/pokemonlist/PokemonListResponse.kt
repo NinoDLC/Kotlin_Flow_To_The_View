@@ -2,7 +2,7 @@ package fr.delcey.pokedexfullflow.data.pokemonlist
 
 import com.google.gson.annotations.SerializedName
 
-data class PokemonListReponse(
+data class PokemonListResponse(
 
     @field:SerializedName("next")
     val next: String? = null,
@@ -14,5 +14,5 @@ data class PokemonListReponse(
     val count: Int? = null,
 
     @field:SerializedName("results")
-    val pokemonLiteReponses: List<PokemonLiteReponse> = emptyList()
+    val pokemonLiteResponses: List<PokemonLiteResponse> = emptyList()
 )

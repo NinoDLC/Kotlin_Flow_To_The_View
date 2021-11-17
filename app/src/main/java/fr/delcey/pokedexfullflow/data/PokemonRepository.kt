@@ -44,21 +44,22 @@ class PokemonRepository @Inject constructor() {
         val pokemonResponses = mutableListOf<PokemonResponse>()
 
         for (i in 1..9) {
-
             delay(2_000)
 
-            pokeApi.getPokemonById(i.toString())?.let { pokemonResponse ->
-                pokemonResponses.add(pokemonResponse)
+            try {
+                pokemonResponses.add(pokeApi.getPokemonById(i.toString()))
 
                 Log.d("PokemonRepository", "getPokemonsFlow() : emitting ${pokemonResponses.size} pokemons")
 
                 emit(pokemonResponses)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
         }
     }
 
     /**
-     * A Flow that never completes
+     * A Flow that never completes, use it to test different behaviors in the ViewModel / View
      */
     fun getInfinitePokemonsFlow(): Flow<List<PokemonResponse>> = flow {
 
@@ -68,12 +69,14 @@ class PokemonRepository @Inject constructor() {
         while (true) {
             delay(2_000)
 
-            pokeApi.getPokemonById(i.toString())?.let { pokemonResponse ->
-                pokemonResponses.add(pokemonResponse)
+            try {
+                pokemonResponses.add(pokeApi.getPokemonById(i.toString()))
 
                 Log.d("PokemonRepository", "getInfinitePokemonsFlow() : emitting ${pokemonResponses.size} pokemons")
 
                 emit(pokemonResponses)
+            } catch (e: Exception) {
+                e.printStackTrace()
             }
 
             i++

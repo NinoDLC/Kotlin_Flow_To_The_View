@@ -42,13 +42,4 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/pokemon_itemview" />
 
-<!--    <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--        android:id="@+id/pokemons_fab_search"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_gravity="end|bottom"-->
-<!--        android:layout_margin="16dp"-->
-<!--        android:contentDescription="@string/content_description_search"-->
-<!--        android:src="@drawable/ic_search_white_24dp" />-->
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
