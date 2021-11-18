@@ -37,6 +37,14 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+
+        unitTests.all {
+            if (name == "testDebugUnitTest" || name == "testReleaseUnitTest") {
+                kover {
+                    //excludes = [".*_.*"]
+                }
+            }
+        }
     }
 }
 
