@@ -1,5 +1,5 @@
 # Kotlin_Flow_To_The_View
-PoC using Flow to the View on an Android Project. 
+PoC using Flow to the View on an Android Project. **DO NOT** expose a Flow to the View. Use LiveData to communicate between ViewModel and View instead. 
 
 TL;DR : 
 
