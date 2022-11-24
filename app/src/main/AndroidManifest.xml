@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest
     xmlns:android="http://schemas.android.com/apk/res/android"
-    package="fr.delcey.pokedexfullflow">
+    package="fr.delcey.pokedexfullflow"
+    >
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -12,21 +13,26 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.PokedexFullFlow">
-        <activity android:name=".ui.flow.FlowPokemonActivity">
+        android:theme="@style/Theme.PokedexFullFlow"
+        >
+        <activity
+            android:name=".ui.flow.FlowPokemonActivity"
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.livedata.LiveDataPokemonActivity" >
+<!--        <activity-->
+<!--            android:name=".ui.livedata.LiveDataPokemonActivity"-->
+<!--            android:exported="true"-->
+<!--            >-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
-
 <!--                <category android:name="android.intent.category.LAUNCHER" />-->
 <!--            </intent-filter>-->
-        </activity>
+<!--        </activity>-->
     </application>
 
 </manifest>
