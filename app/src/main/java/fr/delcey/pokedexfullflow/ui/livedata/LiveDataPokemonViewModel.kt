@@ -3,18 +3,18 @@ package fr.delcey.pokedexfullflow.ui.livedata
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.liveData
 import androidx.lifecycle.switchMap
 import dagger.hilt.android.lifecycle.HiltViewModel
 import fr.delcey.pokedexfullflow.CoroutineToolsProvider
 import fr.delcey.pokedexfullflow.data.PokemonRepository
 import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.ui.PokemonViewState
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.mapLatest
 import java.util.Locale
 import javax.inject.Inject
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 @HiltViewModel
 class LiveDataPokemonViewModel @Inject constructor(
     pokemonRepository: PokemonRepository,
@@ -24,11 +24,15 @@ class LiveDataPokemonViewModel @Inject constructor(
     private val triggerRefreshMutableLiveData = MutableLiveData(Unit)
 
     val viewStateLiveData: LiveData<List<PokemonViewState>> = triggerRefreshMutableLiveData.switchMap {
-        pokemonRepository.getPokemonsFlow().mapLatest { pokemonResponses ->
-            pokemonResponses.mapNotNull { pokemonResponse ->
-                map(pokemonResponse)
+        liveData(coroutineToolsProvider.ioCoroutineDispatcher) {
+            pokemonRepository.getPokemonsFlow().mapLatest { pokemonResponses ->
+                pokemonResponses.mapNotNull { pokemonResponse ->
+                    map(pokemonResponse)
+                }
+            }.collect {
+                emit(it)
             }
-        }.asLiveData(coroutineToolsProvider.ioCoroutineDispatcher)
+        }
     }
 
     fun refresh() {

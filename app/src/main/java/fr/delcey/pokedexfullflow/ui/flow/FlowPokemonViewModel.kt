@@ -9,13 +9,13 @@ import fr.delcey.pokedexfullflow.data.pokemon.PokemonResponse
 import fr.delcey.pokedexfullflow.ui.PokemonViewState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.plus
 import java.util.Locale
 import javax.inject.Inject
 
-@Suppress("EXPERIMENTAL_API_USAGE")
 @HiltViewModel
 class FlowPokemonViewModel @Inject constructor(
     pokemonRepository: PokemonRepository,
@@ -27,9 +27,11 @@ class FlowPokemonViewModel @Inject constructor(
         tryEmit(Unit)
     }
 
-    val viewStateFlow: Flow<List<PokemonViewState>> = pokemonRepository.getPokemonsFlow().mapLatest { pokemonResponses ->
-        pokemonResponses.mapNotNull { pokemonResponse ->
-            map(pokemonResponse)
+    val viewStateFlow: Flow<List<PokemonViewState>> = triggerRefreshMutableSharedFlow.flatMapLatest {
+        pokemonRepository.getPokemonsFlow().mapLatest { pokemonResponses ->
+            pokemonResponses.mapNotNull { pokemonResponse ->
+                map(pokemonResponse)
+            }
         }
     }.stateIn(
         scope = viewModelScope.plus(coroutineToolsProvider.ioCoroutineDispatcher),
